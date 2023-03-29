@@ -28,11 +28,11 @@ public class FileController {
         File recipeFile = fileService.getRecipeFile();
         if (recipeFile.exists()){
             InputStreamResource resource = new InputStreamResource(new FileInputStream(recipeFile));
-            return ResponseEntity.ok().
-                    contentType(MediaType.APPLICATION_JSON).
-                    contentLength(recipeFile.length()).
-                    header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"Recipes.json\"").
-                    body(resource);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .contentLength(recipeFile.length())
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"Recipes.json\"")
+                    .body(resource);
         } else {
             return ResponseEntity.noContent().build();
         }
@@ -43,11 +43,11 @@ public class FileController {
         File ingredientFile = fileService.getIngredientFile();
         if (ingredientFile.exists()){
             InputStreamResource resource = new InputStreamResource(new FileInputStream(ingredientFile));
-            return ResponseEntity.ok().
-                    contentType(MediaType.APPLICATION_OCTET_STREAM).
-                    contentLength(ingredientFile.length()).
-                    header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"Ingredient.json\"").
-                    body(resource);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .contentLength(ingredientFile.length())
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"Ingredient.json\"")
+                    .body(resource);
         } else {
             return ResponseEntity.noContent().build();
         }
@@ -79,5 +79,22 @@ public class FileController {
             e.printStackTrace();
         }
         return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    //LAST HOMEWORK↓
+    @GetMapping(value = "/exportRecipeList", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public ResponseEntity<InputStreamResource> test () throws IOException {
+        File recipeList = fileService.getRecipeList();
+        if (recipeList.exists()){
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(recipeList));
+            return  ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .contentLength(recipeList.length())
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"recipeList.txt\"")
+                    .body(resource);
+
+        } else {
+            return ResponseEntity.noContent().build();
+        }
     }
 }

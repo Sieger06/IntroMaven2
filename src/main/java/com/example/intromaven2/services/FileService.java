@@ -1,10 +1,12 @@
 package com.example.intromaven2.services;
 
 import java.io.File;
+import java.io.IOException;
 
 public interface FileService {
     // RECIPE ↓
     File getRecipeFile();
+
     boolean saveRecipeFile(String jason);
     String readRecipeFile();
 
@@ -16,4 +18,6 @@ public interface FileService {
     String readIngredientFile();
 
     boolean cleanIngredientFile();
+
+    File getRecipeList() throws IOException;
 }
