@@ -45,7 +45,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private boolean cleanRecipeFile(){
+    public boolean cleanRecipeFile(){
         try {
             Files.deleteIfExists(Path.of(FilesPath, recipeFileName));
             Files.createFile(Path.of(FilesPath, recipeFileName));
@@ -83,7 +83,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private boolean cleanIngredientFile(){
+    public boolean cleanIngredientFile(){
         try {
             Files.deleteIfExists(Path.of(FilesPath, ingredientFileName));
             Files.createFile(Path.of(FilesPath, ingredientFileName));

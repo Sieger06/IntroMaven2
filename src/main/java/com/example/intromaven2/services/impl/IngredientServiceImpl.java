@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +28,12 @@ public class IngredientServiceImpl implements IngredientService {
 
     private int countId = 1;
     @PostConstruct
-    private void init () {readFromFile();}
+    private void init(){
+        File file = fileService.getIngredientFile();
+        if (file.exists() && file.length() !=0) {
+            readFromFile();
+        }
+    }
 
     @Override
     public boolean addIngredient(Ingredient ingredient) {

@@ -8,8 +8,12 @@ public interface FileService {
     boolean saveRecipeFile(String jason);
     String readRecipeFile();
 
+    boolean cleanRecipeFile();
+
     // INGREDIENT ↓
     File getIngredientFile();
     boolean saveIngredientFile(String jason);
     String readIngredientFile();
+
+    boolean cleanIngredientFile();
 }

@@ -2,18 +2,16 @@ package com.example.intromaven2.controllers;
 
 import com.example.intromaven2.services.FileService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 
 @RestController
 @RequestMapping("/file")
@@ -33,7 +31,7 @@ public class FileController {
             return ResponseEntity.ok().
                     contentType(MediaType.APPLICATION_JSON).
                     contentLength(recipeFile.length()).
-                    header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = \"Recipes.json\"").
+                    header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"Recipes.json\"").
                     body(resource);
         } else {
             return ResponseEntity.noContent().build();
@@ -48,10 +46,38 @@ public class FileController {
             return ResponseEntity.ok().
                     contentType(MediaType.APPLICATION_OCTET_STREAM).
                     contentLength(ingredientFile.length()).
-                    header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = \"Ingredient.json\"").
+                    header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"Ingredient.json\"").
                     body(resource);
         } else {
             return ResponseEntity.noContent().build();
         }
+    }
+
+    @PostMapping (value = "/importRecipe", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> upLoadRecipeFile(@RequestParam MultipartFile recipeFile){
+        fileService.cleanRecipeFile();
+        File file = fileService.getRecipeFile();
+
+        try (FileOutputStream fos = new FileOutputStream(file)){
+            IOUtils.copy(recipeFile.getInputStream(), fos);
+            return  ResponseEntity.ok().build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @PostMapping (value = "/importIngredient", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> upLoadIngredientFile(@RequestParam MultipartFile ingredientFile){
+        fileService.cleanIngredientFile();
+        File file = fileService.getIngredientFile();
+
+        try (FileOutputStream fos = new FileOutputStream(file)){
+            IOUtils.copy(ingredientFile.getInputStream(), fos);
+            return  ResponseEntity.ok().build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }

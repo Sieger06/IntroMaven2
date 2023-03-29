@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -32,7 +33,10 @@ public class RecipeServiceImpl implements RecipeService {
 
     @PostConstruct
     private void init(){
-        readFromFile();
+        File file = fileService.getRecipeFile();
+        if (file.exists() && file.length() !=0) {
+            readFromFile();
+        }
     }
 
     @Override
